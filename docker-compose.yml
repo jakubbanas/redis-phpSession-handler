@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  web_1:
+    build: .
+    ports:
+     - "8080:8080"
+    volumes: 
+     - ./conf/php.ini:/usr/local/etc/php/php.ini
+     - ./data:/data
+    command: php -S 0.0.0.0:8080 /data/app.php
+    networks: 
+     - test
+
+  web_2:
+    build: .
+    ports:
+     - "8081:8080"
+    volumes: 
+     - ./conf/php.ini:/usr/local/etc/php/php.ini
+     - ./data:/data
+    command: php -S 0.0.0.0:8080 /data/app.php
+    networks: 
+     - test
+
+  redis:
+    image: "redis:alpine"
+    ports:
+     - 6379:6379
+    volumes:
+     - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks: 
+     - test
+
+networks:
+  test:
+    driver: bridge
